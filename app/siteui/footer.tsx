@@ -1,6 +1,6 @@
 // footer.tsx
 
-export default function Footer() {
+export default function dsqdsq() {
 	return (
 		<footer className="py-4 bg-header">
 			<div className="max-w-4xl flex flex-col mx-auto px-4">

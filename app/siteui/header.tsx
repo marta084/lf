@@ -1,7 +1,7 @@
 import { Link, NavLink, useMatches } from '@remix-run/react'
 
 
-export default function Header() {
+export default function sqdsqdsq() {
 	const matches = useMatches()
 	const isOnSearchPage = matches.find(m => m.id === 'routes/users+/index')
 	return (
