@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id          String     @id @default(value: cuid())
+  email       String     @unique
+  username    String     @unique
+  name        String?
+  createdAt   DateTime
+  updatedAt   DateTime   @updatedAt
+  notes       Note[]
+  userImage   UserImage? @relation(onDelete: Cascade, onUpdate: Cascade, fields: [userImageId], references: [id])
+  userImageId String?    @unique
+}
+
+model Note {
+  id        String      @id @default(value: cuid())
+  title     String
+  content   String
+  createdAt DateTime
+  updatedAt DateTime    @updatedAt
+  ownerId   String?
+  owner     User?       @relation(onDelete: Cascade, onUpdate: Cascade, fields: [ownerId], references: [id])
+  noteImage NoteImage[]
+
+  @@index(fields: [ownerId])
+}
+
+model NoteImage {
+  id            String   @id @default(value: cuid())
+  altText       String?
+  cloudinaryId  String?
+  cloudinaryURL String?
+  createdAt     DateTime
+  updatedAt     DateTime @updatedAt
+  noteId        String?
+  note          Note?    @relation(onDelete: Cascade, onUpdate: Cascade, fields: [noteId], references: [id])
+
+  @@index(fields: [noteId])
+}
+
+model UserImage {
+  id            String   @id @default(value: cuid())
+  cloudinaryurl String?
+  createdAt     DateTime
+  updatedAt     DateTime @updatedAt
+  user          User?
+}
