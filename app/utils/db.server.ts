@@ -21,5 +21,4 @@ const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 export default prisma;
 
-
 globalForPrisma.prisma = prisma;
