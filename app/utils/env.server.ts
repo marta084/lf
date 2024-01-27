@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 const schema = z.object({
-	ENV: z.enum(['production', 'development', 'test'] as const),
+	NODE_ENV: z.enum(['production', 'development', 'test'] as const),
 })
 
 
@@ -29,6 +29,6 @@ export function init() {
  */
 export function getEnv() {
 	return {
-		MODE: NODE_ENV,
+		MODE: process.env.NODE_ENV,
 	}
 }
