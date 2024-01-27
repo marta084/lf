@@ -9,7 +9,7 @@ const NotesSchema = z.object({
 	title: z.string().nullable(),
 })
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export async function loader({ params }: LoaderFunctionArgs) {
 	const notes = await prisma.note.findMany({
 		select: {
 			id: true,
