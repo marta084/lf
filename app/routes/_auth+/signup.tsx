@@ -2,18 +2,18 @@ import {
 	redirect,
 	type MetaFunction,
 	type ActionFunctionArgs,
-} from '@remix-run/node'
+} from '@remix-run/cloudflare'
 import { Form } from '@remix-run/react'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { HoneypotInputs } from 'remix-utils/honeypot/react'
-import { checkHoneypot } from '~/utils/honeypot.server'
-import { z } from 'zod'
+
+
 
 export async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData()
-	checkHoneypot(formData)
+	
 	// we'll implement signup later
 	return redirect('/')
 }

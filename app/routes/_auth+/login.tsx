@@ -1,8 +1,8 @@
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
 
-import { json, redirect } from '@remix-run/node'
-import type { ActionFunctionArgs } from '@remix-run/node'
+import { json, redirect } from '@remix-run/cloudflare'
+import type { ActionFunctionArgs } from '@remix-run/cloudflare'
 import { z } from 'zod'
 
 import { HoneypotInputs } from 'remix-utils/honeypot/react'
@@ -24,7 +24,7 @@ const LoginFormSchema = z.object({
 export async function action({ request }: ActionFunctionArgs) {
 	const formData = await request.formData()
 	await validateCSRF(formData, request.headers)
-	checkHoneypot(formData)
+	
 
 	const submission = await parse(formData, {
 		schema: intent =>

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from '@remix-run/cloudflare'
 import { Label } from '@radix-ui/react-label'
 import { Form, useActionData } from '@remix-run/react'
 import { Input } from '~/components/ui/input'
