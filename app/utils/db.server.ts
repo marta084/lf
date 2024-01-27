@@ -4,8 +4,8 @@ import { createClient } from '@libsql/client/web';
 
 const prismaClientSingleton = () => {
   const libsql = createClient({
-    url: process.env.TURSO_DATABASE_URL || 'libsql://lf-marta084.turso.io',
-    authToken: process.env.TURSO_AUTH_TOKEN || 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOiIyMDI0LTAxLTI1VDA2OjI3OjExLjc1NDczNDA4WiIsImlkIjoiYWJlOWEyYTMtYmI0NC0xMWVlLWI0MGItMzIwZDcwZWY1MzgyIn0.ZAHcWKC71a92hWz3Xkax7HlXgUbc-f_zX2tfrSwR_Xeew-kAkYAjWCp85vYvZmi622vEXAvTRf4Z24AjBY2uDA',
+    url: 'libsql://lf-marta084.turso.io',
+    authToken: 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOiIyMDI0LTAxLTI1VDA2OjI3OjExLjc1NDczNDA4WiIsImlkIjoiYWJlOWEyYTMtYmI0NC0xMWVlLWI0MGItMzIwZDcwZWY1MzgyIn0.ZAHcWKC71a92hWz3Xkax7HlXgUbc-f_zX2tfrSwR_Xeew-kAkYAjWCp85vYvZmi622vEXAvTRf4Z24AjBY2uDA',
   });
   const adapter = new PrismaLibSQL(libsql);
   return new PrismaClient({ adapter });
