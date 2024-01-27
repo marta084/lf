@@ -16,8 +16,8 @@
     "@conform-to/zod": "^0.9.1",
     "@libsql/client": "^0.3.6",
     "@paralleldrive/cuid2": "^2.2.2",
-    "@prisma/adapter-libsql": "^0.4.1",
-    "@prisma/client": "5.4.0-dev.61",
+    "@prisma/adapter-libsql": "^5.8.1",
+    "@prisma/client": "^5.8.1",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
@@ -25,9 +25,6 @@
     "@remix-run/cloudflare-pages": "^2.5.1",
     "@remix-run/css-bundle": "^2.5.1",
     "@remix-run/react": "^2.5.1",
-    "isbot": "^4.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "address": "^2.0.1",
     "chalk": "^5.3.0",
     "class-variance-authority": "^0.7.0",
@@ -42,11 +39,11 @@
     "faker": "^5.5.3",
     "get-port": "^7.0.0",
     "glob": "^10.3.10",
-    
+    "isbot": "^4.1.0",
     "libsql": "^0.2.0",
     "morgan": "^1.10.0",
-    
-    
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "remix-utils": "^7.5.0",
     "sonner": "^1.3.1",
     "spin-delay": "^1.2.0",
@@ -56,7 +53,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    
+    "@cloudflare/workers-types": "^4.20240117.0",
+    "@remix-run/dev": "^2.5.1",
     "@remix-run/eslint-config": "2.5.1",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/compression": "^1.7.5",
@@ -64,7 +62,9 @@
     "@types/faker": "^6.6.9",
     "@types/fs-extra": "^11.0.4",
     "@types/morgan": "^1.9.9",
-    
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
     "autoprefixer": "^10.4.17",
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",
@@ -72,8 +72,14 @@
     "dotenv": "^16.4.1",
     "enforce-unique": "^1.2.0",
     "esbuild": "^0.19.12",
-    
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "fs-extra": "^11.2.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.33",
@@ -84,22 +90,8 @@
     "remix-flat-routes": "^0.6.4",
     "rmx-cli": "^0.4.15",
     "tsx": "^4.7.0",
-    
-    "@cloudflare/workers-types": "^4.20240117.0",
-    "@remix-run/dev": "^2.5.1",
-    "@types/react": "^18.2.20",
-    "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "eslint": "^8.38.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "^5.1.0",
     "wrangler": "^3.25.0"
-
   },
   "engines": {
     "node": ">=18.0.0"

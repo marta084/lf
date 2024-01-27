@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import { type LoaderFunctionArgs, json } from '@remix-run/cloudflare'
 import { NavLink, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import prisma from '~/utils/db.server'
