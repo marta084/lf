@@ -3,15 +3,10 @@ import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { createClient } from '@libsql/client/web';
 
 const prismaClientSingleton = () => {
-  // Access environment variables configured in Cloudflare Pages dashboard
-  const url = process.env.TURSO_DATABASE_URL || 'fallback_url';
-  const authToken = process.env.TURSO_AUTH_TOKEN || 'fallback_auth_token';
-
   const libsql = createClient({
-    url,
-    authToken
+    url: process.env.TURSO_DATABASE_URL?.[0] ?? 'TURSO_DATABASE_URL',
+    authToken: process.env.TURSO_AUTH_TOKEN?.[0] ?? 'TURSO_AUTH_TOKEN'
   });
-
   const adapter = new PrismaLibSQL(libsql);
 
   return new PrismaClient({ adapter });
