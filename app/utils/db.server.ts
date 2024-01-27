@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client/edge';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { createClient } from '@libsql/client/web';
 
+
+
 const prismaClientSingleton = () => {
   const libsql = createClient({
     url: 'libsql://lf-marta084.turso.io',
