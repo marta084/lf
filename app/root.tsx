@@ -20,7 +20,7 @@ import {
 	useLoaderData,
 } from '@remix-run/react'
 
-import { HoneypotProvider } from 'remix-utils/honeypot/react'
+
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react'
 import MartaBlogFavicon from './assets/favicon.ico'
 import { GeneralErrorBoundary } from './components/error-boundary'
@@ -34,7 +34,7 @@ import rdtStylesheet from 'remix-development-tools/index.css'
 import Footer from './components/site/footer'
 import Header from './components/site/header'
 import { getEnv } from './utils/env.server'
-import { honeypot } from './utils/honeypot.server'
+
 import { Toaster, toast as showToast } from 'sonner'
 
 import { getTheme, setTheme, type Theme } from './utils/theme.server'
@@ -62,7 +62,7 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const [csrfToken, csrfCookieHeader] = await csrf.commitToken(request)
-	const honeyProps = honeypot.getInputProps()
+	
 	const toastCookieSession = await toastSessionStorage.getSession(
 		request.headers.get('cookie'),
 	)
@@ -75,7 +75,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 			toast,
 			ENV: getEnv(),
 			csrfToken,
-			honeyProps,
+			
 		},
 		{
 			headers: combineHeaders(
@@ -194,9 +194,9 @@ export default function AppWithProviders() {
 	const data = useLoaderData<typeof loader>()
 	return (
 		<AuthenticityTokenProvider token={data.csrfToken}>
-			<HoneypotProvider {...data.honeyProps}>
+			
 				<App />
-			</HoneypotProvider>
+			
 		</AuthenticityTokenProvider>
 	)
 }
