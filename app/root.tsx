@@ -29,7 +29,7 @@ import { csrf } from '~/utils/csrf.server'
 // icon, styles, components
 import tailwindStyleSheet from './styles/tailwind.css'
 import './styles/global.css'
-
+import rdtStylesheet from 'remix-development-tools/index.css'
 
 import Footer from './components/site/footer'
 import Header from './components/site/header'
@@ -51,7 +51,7 @@ import { Spacer } from './components/spacer'
 export const links: LinksFunction = () => {
 	return [
 		...(cssBundleHref
-			? []
+			? [{ rel: 'stylesheet', href: rdtStylesheet }]
 			: []),
 		{ rel: 'icon', href: MartaBlogFavicon, type: 'image/x-icon' },
 		{ rel: 'stylesheet', href: tailwindStyleSheet },
