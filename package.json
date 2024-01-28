@@ -41,6 +41,7 @@
     "glob": "^10.3.10",
     "isbot": "^4.4.0",
     "libsql": "^0.2.0",
+    "mongo-uri-builder": "^4.0.0",
     "morgan": "^1.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
