@@ -15,6 +15,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       id: true,
       title: true,
     },
+    cacheStrategy: { ttl: 60 },
   })
   const validatedNotes = NotesSchema.array().parse(notes)
 
