@@ -17,6 +17,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       id: params.noteId,
       owner: { username: params.username },
     },
+    cacheStrategy: { ttl: 14400 },
   })
   invariantResponse(note, 'Not found', { status: 404 })
   return json({ note })

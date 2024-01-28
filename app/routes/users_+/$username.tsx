@@ -37,6 +37,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     where: {
       username: params.username,
     },
+    cacheStrategy: { ttl: 14400 },
   })
 
   invariantResponse(user, 'User not found', { status: 404 })
@@ -125,6 +126,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       id: true,
       userImage: true,
     },
+    cacheStrategy: { ttl: 14400 },
   })
 
   if (retrievedUser) {
