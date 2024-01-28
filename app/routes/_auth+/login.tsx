@@ -1,3 +1,4 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { conform, useForm } from '@conform-to/react'
 import { getFieldsetConstraint, parse } from '@conform-to/zod'
 
@@ -15,6 +16,14 @@ import { useIsPending } from '~/utils/misc'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PasswordSchema, UsernameSchema } from '~/utils/user-validation'
 import { Form, Link, useActionData } from '@remix-run/react'
+
+
+
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return null;
+};
+
 
 const LoginFormSchema = z.object({
 	username: UsernameSchema,
@@ -50,7 +59,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		return json({ status: 'error', submission } as const, { status: 400 })
 	}
 	// Do something with the data
-	return redirect('/')
+	return redirect('/hawai')
 }
 
 export default function LoginPage() {
