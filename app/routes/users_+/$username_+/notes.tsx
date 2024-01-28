@@ -41,7 +41,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     where: {
       username: params.username,
     },
-    cacheStrategy: { ttl: 14400 },
   })
 
   invariantResponse(owner, 'User not found', { status: 404 })

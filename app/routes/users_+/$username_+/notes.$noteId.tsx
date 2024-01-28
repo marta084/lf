@@ -33,7 +33,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       ownerId: true,
       updatedAt: true,
     },
-    cacheStrategy: { ttl: 14400 },
   })
 
   invariantResponse(note, 'Not found', { status: 404 })
