@@ -2,24 +2,41 @@ import { PrismaClient } from '@prisma/client/edge';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { createClient } from '@libsql/client/web';
 
-const prismaClientSingleton = () => {
+type PrismaClientSingleton = PrismaClient;
+
+export default async function fetch(request: Request, env: Record<string, string | undefined>, ctx: ExecutionContext): Promise<Response> {
+  const prisma = await getPrismaClient(env);
+
+  try {
+    const users = await prisma.user.findMany();
+    return new Response(JSON.stringify(users), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error querying Prisma:', error);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+      status: 500
+    });
+  }
+}
+
+async function getPrismaClient(env: Record<string, string | undefined>): Promise<PrismaClientSingleton> {
+  const url = env.TURSO_DATABASE_URL?.trim();
+  if (!url) {
+    throw new Error("TURSO_DATABASE_URL env var is not defined");
+  }
+
+  const authToken = env.TURSO_AUTH_TOKEN?.trim();
+  if (!authToken) {
+    throw new Error("TURSO_AUTH_TOKEN env var is not defined");
+  }
+
   const libsql = createClient({
-    url: 'libsql://lf-marta084.turso.io',
-    authToken: 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOiIyMDI0LTAxLTI1VDA2OjI3OjExLjc1NDczNDA4WiIsImlkIjoiYWJlOWEyYTMtYmI0NC0xMWVlLWI0MGItMzIwZDcwZWY1MzgyIn0.ZAHcWKC71a92hWz3Xkax7HlXgUbc-f_zX2tfrSwR_Xeew-kAkYAjWCp85vYvZmi622vEXAvTRf4Z24AjBY2uDA',
+    url: `libsql://${url}`,
+    authToken,
   });
+
   const adapter = new PrismaLibSQL(libsql);
   return new PrismaClient({ adapter });
-};
-
-type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClientSingleton | undefined;
-};
-
-const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
-
-export default prisma;
-
-
-globalForPrisma.prisma = prisma;
+}
