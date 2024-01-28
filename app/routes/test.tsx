@@ -1,7 +1,7 @@
 import { type LoaderFunctionArgs, json } from '@remix-run/cloudflare'
 import { NavLink, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
-import { PrismaClient } from '~/utils/db.server'
+import prisma from '~/utils/db.server'
 import { cn } from '~/utils/misc'
 
 const NotesSchema = z.object({
@@ -10,7 +10,7 @@ const NotesSchema = z.object({
 })
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const notes = await PrismaClient.note.findMany({
+  const notes = await prisma.note.findMany({
     select: {
       id: true,
       title: true,
