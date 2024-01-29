@@ -14,6 +14,7 @@ import prisma from '~/utils/db.server'
 import { invariantResponse, useIsPending } from '~/utils/misc'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { validateCSRF } from '~/utils/csrf.server'
+import { uploadImage } from '~/utils/cloudinary.server'
 
 import { StatusButton } from '~/components/ui/status-button'
 import { conform, useForm } from '@conform-to/react'
@@ -37,7 +38,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     where: {
       username: params.username,
     },
-    cacheStrategy: { ttl: 14400 },
   })
 
   invariantResponse(user, 'User not found', { status: 404 })
@@ -77,7 +77,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   invariantResponse(params.username, 'Username is required', { status: 400 })
 
   const uploadHandler = composeUploadHandlers(
-    async ({ name, data }) => {
+    async ({ name, data, filename }) => {
       if (name !== 'img') {
         return undefined
       }
@@ -126,7 +126,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       id: true,
       userImage: true,
     },
-    cacheStrategy: { ttl: 14400 },
   })
 
   if (retrievedUser) {
