@@ -12,7 +12,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       title: true,
       content: true,
     },
-    cacheStrategy: { ttl: 14400 },
+    cacheStrategy: { ttl: 0 },
   })
   invariantResponse(note, 'Note not found', { status: 404 })
   return json({

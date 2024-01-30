@@ -164,7 +164,7 @@ function Document({
         />
 
         <ScrollRestoration />
-        {includeScripts ? <Scripts /> : null}
+        {includeScripts ? <Scripts /> : <Scripts />}
         <LiveReload />
       </body>
     </html>
