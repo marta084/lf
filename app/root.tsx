@@ -46,6 +46,8 @@ import { toastSessionStorage } from '~/utils/toast.server'
 
 import { useEffect } from 'react'
 import { Spacer } from './components/spacer'
+import { HoneypotProvider } from 'remix-utils/honeypot/react'
+import { honeypot } from './utils/honeypot.server'
 
 export const links: LinksFunction = () => {
   return [
@@ -149,22 +151,13 @@ function Document({
           visibleToasts={90}
           toastOptions={{
             unstyled: false,
-            classNames: {
-              toast: '',
-              title: 'text-red-400',
-              description: 'text-red-400',
-              actionButton: 'bg-zinc-400',
-              cancelButton: 'bg-white',
-              closeButton: 'bg-grey-400',
-            },
           }}
           closeButton
           position="bottom-right"
-          dir="rtl"
         />
 
         <ScrollRestoration />
-        {includeScripts ? <Scripts /> : <Scripts />}
+        {includeScripts ? <Scripts /> : null}
         <LiveReload />
       </body>
     </html>
