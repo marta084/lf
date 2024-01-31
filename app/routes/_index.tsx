@@ -1,5 +1,5 @@
 import { defer } from '@remix-run/cloudflare'
-import { Await, useLoaderData, useRevalidator } from '@remix-run/react'
+import { Await, useLoaderData } from '@remix-run/react'
 import prisma from '~/utils/db.server'
 import { Suspense } from 'react'
 
@@ -19,12 +19,11 @@ export const loader = async () => {
     },
   })
 
-  return defer({ posts: wait(0).then(() => Posts) })
+  return defer({ posts: wait(10).then(() => Posts) })
 }
 
 export default function Index() {
   const { posts } = useLoaderData() as DeferredData
-  const refresh = useRevalidator()
 
   return (
     <div className="mb-auto">
@@ -32,7 +31,7 @@ export default function Index() {
       <h1> WELCOME TO A GAMING NEWS PLATFORM</h1>
       <div className="my-8">
         <h1>posts:</h1>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={'Loading'}>
           <Await resolve={posts}>
             {posts => (
               <ul>
@@ -47,20 +46,4 @@ export default function Index() {
       </div>
     </div>
   )
-}
-
-function Loading() {
-  return (
-    <ul>
-      {Array.from({ length: 12 }).map((_, i) => (
-        <li key={i}>
-          <RandomLengthDashes /> <RandomLengthDashes /> <RandomLengthDashes />
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-function RandomLengthDashes() {
-  return <span>{'-'.repeat(Math.floor(Math.random() * 20))}</span>
 }
