@@ -1,5 +1,5 @@
 import { defer } from '@remix-run/cloudflare'
-import { Await, useLoaderData } from '@remix-run/react'
+import { Await, NavLink, useLoaderData } from '@remix-run/react'
 import prisma from '~/utils/db.server'
 import { Suspense } from 'react'
 
@@ -17,6 +17,7 @@ export const loader = async () => {
       content: true,
       updatedAt: true,
     },
+    cacheStrategy: { ttl: 14400 },
   })
 
   return defer({ posts: wait(10).then(() => Posts) })
@@ -36,7 +37,15 @@ export default function Index() {
             {posts => (
               <ul>
                 {posts.map(post => (
-                  <li key={post.id}>{post.title}</li>
+                  <li
+                    className="m-4 border-2 border-green-300 p-2"
+                    key={post.id}
+                  >
+                    <NavLink to={post.id}>
+                      <h1>{post.title}</h1>
+                      <p>{post.content}</p>
+                    </NavLink>
+                  </li>
                 ))}
               </ul>
             )}

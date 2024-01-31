@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/cloudflare'
+import { defer } from '@remix-run/cloudflare'
 import { NavLink, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import prisma from '~/utils/db.server'
@@ -9,7 +9,7 @@ const NotesSchema = z.object({
   title: z.string().nullable(),
 })
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader() {
   const notes = await prisma.note.findMany({
     select: {
       id: true,
@@ -19,7 +19,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   })
   const validatedNotes = NotesSchema.array().parse(notes)
 
-  return json({ notes: validatedNotes })
+  return defer({ notes: validatedNotes })
 }
 
 export default function Testload() {

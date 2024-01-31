@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare'
+import { defer, type LoaderFunctionArgs } from '@remix-run/cloudflare'
 import { useLoaderData } from '@remix-run/react'
 import prisma from '~/utils/db.server'
 import { invariantResponse } from '~/utils/misc'
@@ -12,10 +12,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
       title: true,
       content: true,
     },
-    cacheStrategy: { ttl: 0 },
+    cacheStrategy: { ttl: 14400 },
   })
   invariantResponse(note, 'Note not found', { status: 404 })
-  return json({
+  return defer({
     note,
   })
 }

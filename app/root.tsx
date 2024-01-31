@@ -45,6 +45,8 @@ import { toastSessionStorage } from '~/utils/toast.server'
 
 import { useEffect } from 'react'
 import { Spacer } from './components/spacer'
+import { HoneypotProvider } from 'remix-utils/honeypot/react'
+import { honeypot } from './utils/honeypot.server'
 
 export const links: LinksFunction = () => {
   return [
@@ -64,7 +66,7 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const [csrfToken, csrfCookieHeader] = await csrf.commitToken(request)
-  // const honeyProps = honeypot.getInputProps()
+  const honeyProps = honeypot.getInputProps()
   const toastCookieSession = await toastSessionStorage.getSession(
     request.headers.get('cookie'),
   )
@@ -76,7 +78,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       toast,
       ENV: getEnv(),
       csrfToken,
-      // honeyProps,
+      honeyProps,
     },
     {
       headers: combineHeaders(
@@ -192,9 +194,9 @@ export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>()
   return (
     <AuthenticityTokenProvider token={data.csrfToken}>
-      {/* <HoneypotProvider {...data.honeyProps}> */}
-      <AppExport />
-      {/* </HoneypotProvider> */}
+      <HoneypotProvider {...data.honeyProps}>
+        <AppExport />
+      </HoneypotProvider>
     </AuthenticityTokenProvider>
   )
 }
