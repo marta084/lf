@@ -11,6 +11,7 @@ import {
 } from '@remix-run/cloudflare'
 import { Form, useFetcher } from '@remix-run/react'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { floatingToolbarClassName } from '~/components/floating-toolbar'
@@ -19,6 +20,7 @@ import { Button } from '~/components/ui/button'
 import { StatusButton } from '~/components/ui/status-button'
 import { validateCSRF } from '~/utils/csrf.server'
 import prisma from '~/utils/db.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { useIsPending } from '~/utils/misc'
 import { toastSessionStorage } from '~/utils/toast.server'
 
@@ -41,6 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createMemoryUploadHandler({ maxPartSize: MAX_UPLOAD_SIZE }),
   )
   await validateCSRF(formData, request.headers)
+  checkHoneypot(formData)
 
   const submission = await parse(formData, {
     schema: NoteEditorSchema.transform(async ({ ...data }) => {
@@ -127,6 +130,7 @@ export function NoteEditor({
         encType="multipart/form-data"
       >
         <AuthenticityTokenInput />
+        <HoneypotInputs />
         {/*
 					This hidden submit button is here to ensure that when the user hits
 					"enter" on an input field, the primary form function is submitted

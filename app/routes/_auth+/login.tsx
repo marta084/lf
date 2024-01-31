@@ -20,6 +20,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PasswordSchema, UsernameSchema } from '~/utils/user-validation'
 import { Form, Link, useActionData } from '@remix-run/react'
 import { Turnstile } from '@marsidev/react-turnstile'
+import { checkHoneypot } from '~/utils/honeypot.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null
@@ -33,6 +34,7 @@ const LoginFormSchema = z.object({
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   await validateCSRF(formData, request.headers)
+  checkHoneypot(formData)
 
   const submission = await parse(formData, {
     schema: intent =>
