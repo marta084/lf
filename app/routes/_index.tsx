@@ -20,7 +20,7 @@ export const loader = async () => {
     cacheStrategy: { ttl: 14400 },
   })
 
-  return defer({ postz: Posts, posts: wait(8000).then(() => Posts) })
+  return defer({ postz: Posts, posts: wait(1).then(() => Posts) })
 }
 
 export default function Index() {
