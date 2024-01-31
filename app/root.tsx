@@ -146,7 +146,7 @@ function Document({
             </div>
           </div>
         </div>
-
+        {/* <GlobalLoading /> */}
         {children}
 
         <Toaster
