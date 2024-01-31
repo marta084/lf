@@ -1,28 +1,16 @@
-import { format } from 'date-fns'
-import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare'
-import { NavLink, useLoaderData } from '@remix-run/react'
-import { z } from 'zod'
+import { defer } from '@remix-run/cloudflare'
+import { Await, useLoaderData, useRevalidator } from '@remix-run/react'
 import prisma from '~/utils/db.server'
-import { cn } from '~/utils/misc'
+import { Suspense } from 'react'
 
-const PostsSchema = z.object({
-  id: z.string(),
-  title: z.string().nullable(),
-  content: z.string().nullable(),
-  updatedAt: z.date().nullable(),
-})
+const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
-const formatDate = dateString => {
-  const date = new Date(dateString)
-  return format(date, 'yyyy-MM-dd HH:mm:ss')
+interface DeferredData {
+  posts: Promise<string>
 }
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // console.log('DATABASE_URL:', context.env.DATABASE_URL)
-
-  // const dbtest = context.env.DATABASE_URL ?? 'Database URL not available'
-
-  const Posts = await prisma.note.findMany({
+export const loader = async () => {
+  const Posts = prisma.note.findMany({
     select: {
       id: true,
       title: true,
@@ -31,13 +19,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
   })
 
-  const validatedPosts = PostsSchema.array().parse(Posts)
-
-  return json({ posts: validatedPosts })
+  return defer({ posts: wait(0).then(() => Posts) })
 }
 
 export default function Index() {
-  const data = useLoaderData<typeof loader>()
+  const { posts } = useLoaderData() as DeferredData
+  const refresh = useRevalidator()
 
   return (
     <div className="mb-auto">
@@ -45,32 +32,35 @@ export default function Index() {
       <h1> WELCOME TO A GAMING NEWS PLATFORM</h1>
       <div className="my-8">
         <h1>posts:</h1>
-
-        {data.posts && data.posts.length > 0 ? (
-          data.posts?.map(post => (
-            <div
-              key={post.id}
-              className="m-1 mb-4 border-2 border-gray-300 p-4"
-            >
-              <NavLink
-                to={`test/${post.id}`}
-                className={({ isActive }) =>
-                  cn(isActive && 'bg-black text-white')
-                }
-                preventScrollReset
-              >
-                title: {post.title}
-                <p></p>
-                content: {post.content}
-                <p></p>
-                updated at: {formatDate(post.updatedAt)}
-              </NavLink>
-            </div>
-          ))
-        ) : (
-          <p>No posts yet</p>
-        )}
+        <Suspense fallback={<Loading />}>
+          <Await resolve={posts}>
+            {posts => (
+              <ul>
+                {posts.map(post => (
+                  <li key={post.id}>{post.title}</li>
+                ))}
+              </ul>
+            )}
+          </Await>
+        </Suspense>
+        <p>---------------------------------</p>
       </div>
     </div>
   )
+}
+
+function Loading() {
+  return (
+    <ul>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <li key={i}>
+          <RandomLengthDashes /> <RandomLengthDashes /> <RandomLengthDashes />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function RandomLengthDashes() {
+  return <span>{'-'.repeat(Math.floor(Math.random() * 20))}</span>
 }

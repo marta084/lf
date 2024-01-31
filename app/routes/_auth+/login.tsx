@@ -13,12 +13,13 @@ import { HoneypotInputs } from 'remix-utils/honeypot/react'
 
 import { Field } from '~/components/forms'
 import { validateCSRF } from '~/utils/csrf.server'
-import { checkHoneypot } from '~/utils/honeypot.server'
+
 import { StatusButton } from '~/components/ui/status-button'
 import { useIsPending } from '~/utils/misc'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PasswordSchema, UsernameSchema } from '~/utils/user-validation'
 import { Form, Link, useActionData } from '@remix-run/react'
+import { Turnstile } from '@marsidev/react-turnstile'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null
@@ -57,7 +58,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ status: 'error', submission } as const, { status: 400 })
   }
   // Do something with the data
-  return redirect('/hawai')
+  return redirect('/')
 }
 
 export default function LoginPage() {
@@ -82,6 +83,7 @@ export default function LoginPage() {
           <p className="text-body-md text-muted-foreground">
             Please enter your details to login.
           </p>
+          <Turnstile siteKey="0x4AAAAAAAQ5n7S0e2Xcy7Aj" />
         </div>
         <Form
           method="POST"

@@ -17,7 +17,6 @@ import {
   useFetcher,
   useFetchers,
   useLoaderData,
-  useMatches,
 } from '@remix-run/react'
 
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react'
@@ -46,22 +45,26 @@ import { toastSessionStorage } from '~/utils/toast.server'
 
 import { useEffect } from 'react'
 import { Spacer } from './components/spacer'
-import { HoneypotProvider } from 'remix-utils/honeypot/react'
-import { honeypot } from './utils/honeypot.server'
 
 export const links: LinksFunction = () => {
   return [
-    ...(cssBundleHref ? [{ rel: 'stylesheet', href: rdtStylesheet }] : []),
+    ...(process.env.NODE_ENV === 'development'
+      ? [{ rel: 'stylesheet', href: rdtStylesheet }]
+      : []),
+    // Preload svg sprite as a resource to avoid render blocking
+    { rel: 'preload', href: MartaBlogFavicon, as: 'image' },
+    // Preload CSS as a resource to avoid render blocking
+    { rel: 'preload', href: tailwindStyleSheet, as: 'style' },
+    cssBundleHref ? { rel: 'preload', href: cssBundleHref, as: 'style' } : null,
     { rel: 'icon', href: MartaBlogFavicon, type: 'image/x-icon' },
-    { rel: 'stylesheet', href: tailwindStyleSheet },
-
+    { rel: 'stylesheet', href: tailwindStyleSheet, precedence: 'high' },
     cssBundleHref ? { rel: 'stylesheet', href: cssBundleHref } : null,
   ].filter(Boolean)
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const [csrfToken, csrfCookieHeader] = await csrf.commitToken(request)
-
+  // const honeyProps = honeypot.getInputProps()
   const toastCookieSession = await toastSessionStorage.getSession(
     request.headers.get('cookie'),
   )
@@ -73,6 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       toast,
       ENV: getEnv(),
       csrfToken,
+      // honeyProps,
     },
     {
       headers: combineHeaders(
@@ -121,9 +125,6 @@ function Document({
   children: React.ReactNode
   theme?: Theme
 }>) {
-  const matches = useMatches()
-  const includeScripts = matches.some(match => match.handle?.hydrate)
-
   return (
     <html lang="en" className={`${theme} h-full overflow-x-hidden`}>
       <head>
@@ -157,7 +158,7 @@ function Document({
         />
 
         <ScrollRestoration />
-        {includeScripts ? <Scripts /> : null}
+        <Scripts />
         <LiveReload />
       </body>
     </html>
@@ -180,11 +181,20 @@ function App() {
   )
 }
 
+let AppExport = App
+
+if (process.env.NODE_ENV === 'development') {
+  const { withDevTools } = await import('remix-development-tools')
+  AppExport = withDevTools(AppExport)
+}
+
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>()
   return (
     <AuthenticityTokenProvider token={data.csrfToken}>
-      <App />
+      {/* <HoneypotProvider {...data.honeyProps}> */}
+      <AppExport />
+      {/* </HoneypotProvider> */}
     </AuthenticityTokenProvider>
   )
 }
