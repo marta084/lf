@@ -58,7 +58,7 @@ export default function Index() {
         <ul className="overflow-y-auto overflow-x-hidden pb-12">
           {data.postz && data.postz.length > 0 ? (
             data.postz?.map(potz => (
-              <li key={potz.id} className="m-4 border-2 border-green-300 p-2">
+              <li key={potz.id} className="my-4 border-2 border-green-300 px-2">
                 <NavLink to={potz.id} preventScrollReset>
                   {potz.title}
                 </NavLink>

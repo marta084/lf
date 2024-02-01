@@ -19,10 +19,10 @@ import { useIsPending } from '~/utils/misc'
 import { AuthenticityTokenInput } from 'remix-utils/csrf/react'
 import { PasswordSchema, UsernameSchema } from '~/utils/user-validation'
 import { Form, Link, useActionData } from '@remix-run/react'
-import { Turnstile } from '@marsidev/react-turnstile'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { GeneralErrorBoundary } from '~/components/error-boundary'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async () => {
   return null
 }
 
@@ -85,7 +85,6 @@ export default function LoginPage() {
           <p className="text-body-md text-muted-foreground">
             Please enter your details to login.
           </p>
-          <Turnstile siteKey="0x4AAAAAAAQ5n7S0e2Xcy7Aj" />
         </div>
         <Form
           method="POST"
@@ -133,5 +132,17 @@ export default function LoginPage() {
         </Form>
       </div>
     </div>
+  )
+}
+
+export function ErrorBoundary() {
+  return (
+    <GeneralErrorBoundary
+      statusHandlers={{
+        400: () => {
+          return <p>Form not submitted properly</p>
+        },
+      }}
+    />
   )
 }
