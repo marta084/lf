@@ -1,13 +1,12 @@
 import { defer } from '@remix-run/cloudflare'
-import { Await, NavLink, useLoaderData } from '@remix-run/react'
+import { NavLink, useLoaderData } from '@remix-run/react'
 import prisma from '~/utils/db.server'
-import { Suspense } from 'react'
 
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
-interface DeferredData {
-  posts: Promise<string>
-}
+// interface DeferredData {
+//   posts: Promise<string>
+// }
 
 export const loader = async () => {
   const Posts = await prisma.note.findMany({
@@ -24,7 +23,7 @@ export const loader = async () => {
 }
 
 export default function Index() {
-  const { posts } = useLoaderData() as DeferredData
+  // const { posts } = useLoaderData() as DeferredData
   const data = useLoaderData<typeof loader>()
 
   return (
